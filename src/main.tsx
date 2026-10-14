@@ -1,3 +1,4 @@
+import { ui } from "./content/report";
 import React, { useEffect, useRef, useState, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import "katex/dist/katex.min.css";
@@ -34,10 +35,17 @@ function Exhibit({
 }) {
   const [title, body] = r.exhibits[n - 1];
   return (
-    <article className={`exhibit ${className}`} id={`exhibit-${n}`}>
+    <article
+      className={`exhibit ${className}`}
+      id={`exhibit-${n}`}
+      tabIndex={n === 26 ? 0 : undefined}
+      aria-labelledby={`exhibit-title-${n}`}
+    >
       <div className="exhibit-head">
-        <span className="mono">ЕКСПОНАТ {String(n).padStart(2, "0")}</span>
-        <h3>{title}</h3>
+        <span className="mono">
+          {ui.text001} {String(n).padStart(2, "0")}
+        </span>
+        <h3 id={`exhibit-title-${n}`}>{title}</h3>
       </div>
       <p className="exhibit-copy">{body}</p>
       {children}
@@ -64,7 +72,9 @@ function Chapter({
       <div className="chapter-heading">
         <span className="chapter-number">{no}</span>
         <div>
-          <p className="eyebrow">ДОСЛІДНИЦЬКИЙ РОЗДІЛ / {no}</p>
+          <p className="eyebrow">
+            {ui.text002} {no}
+          </p>
           <h2>{title}</h2>
           <p>{subtitle}</p>
         </div>
@@ -202,7 +212,7 @@ function App() {
   return (
     <>
       <a className="skip" href="#summary">
-        Перейти до дослідження
+        {ui.text003}
       </a>
       <header className="masthead">
         <a className="brand" href="#top">
@@ -210,19 +220,19 @@ function App() {
             ✳
           </span>
           <span>
-            БЮРО НЕЗНАЧНИХ
+            {ui.text004}
             <br />
-            ДОСЛІДЖЕНЬ
+            {ui.text005}
           </span>
         </a>
-        <span className="mast-note">НЕЗАЛЕЖНІ ВІД ЗДОРОВОГО ГЛУЗДУ.</span>
+        <span className="mast-note">{ui.text006}</span>
         <button
           ref={menuButton}
           aria-expanded={menu}
           aria-controls="contents"
           onClick={() => setMenu(!menu)}
         >
-          {menu ? "Закрити ×" : "Зміст ↗"}
+          {menu ? ui.text007 : ui.text008}
         </button>
       </header>
       <div
@@ -231,8 +241,8 @@ function App() {
         aria-hidden="true"
       />
       {menu && (
-        <nav id="contents" aria-label="Зміст звіту">
-          <p className="eyebrow">ЗВІТ № 001 / НАВІГАЦІЯ</p>
+        <nav id="contents" aria-label={ui.text009}>
+          <p className="eyebrow">{ui.text010}</p>
           {r.chapters.map(([id, title], i) => (
             <a key={id} href={`#${id}`} onClick={() => setMenu(false)}>
               <span>{String(i + 1).padStart(2, "0")}</span>
@@ -240,67 +250,70 @@ function App() {
               <span>↗</span>
             </a>
           ))}
-          <p className="fine">Alt + ↓ / ↑ — перехід між розділами</p>
+          <p className="fine">{ui.text011}</p>
         </nav>
       )}
       <main>
         <section id="top" className="hero">
           <div className="hero-meta">
-            <span>ДОСЛІДНИЦЬКИЙ ЗВІТ № 001</span>
-            <span>ВІДКРИТИЙ ДОСТУП · ЗАКРИТЕ ПИТАННЯ</span>
+            <span>{ui.text012}</span>
+            <span>{ui.text013}</span>
           </div>
           <div className="hero-main">
             <div>
-              <p className="eyebrow">
-                Незначна суперечка. Непропорційні зусилля.
-              </p>
+              <p className="eyebrow">{ui.text014}</p>
               <h1>
-                Кількісний аналіз
+                {ui.text015}
                 <br />
-                того, чому
+                {ui.text016}
                 <br />
                 <span className="friend">{r.friendName}</span>
                 <br />
-                <em>помиляється.</em>
+                <em>{ui.text017}</em>
               </h1>
             </div>
             <aside className="hero-aside">
               <span className="stamp">
-                РЕЦЕНЗОВАНО*<small>*умовно</small>
+                {ui.text018}
+                <small>{ui.text019}</small>
               </span>
               <div className="hero-surface">
                 <Surface />
               </div>
-              <p className="mono">РИС. 00 — ПОВЕРХНЯ НЕЗГОДИ</p>
+              <p className="mono">{ui.text020}</p>
               <p>
-                Що вища впевненість,
+                {ui.text021}
                 <br />
-                то цікавіші результати.
+                {ui.text022}
               </p>
             </aside>
           </div>
           <div className="hero-footer">
             <p>{r.subtitle}</p>
             <a className="primary" href="#summary">
-              Переглянути докази <span>↓</span>
+              {ui.text023}
+              <span>↓</span>
             </a>
             <div className="hero-facts">
               <span>
-                Вибірка <b>n = 1</b>
+                {ui.text024}
+                <b>n = 1</b>
               </span>
               <span>
-                Об’єктивність <b>під питанням</b>
+                {ui.text025}
+                <b>{ui.text026}</b>
               </span>
               <span>
-                Час читання <b>8–15 хв</b>
+                {ui.text027}
+                <b>{ui.text028}</b>
               </span>
             </div>
           </div>
           <p className="disclaimer">{r.disclaimer}</p>
         </section>
-        <div className="chapter-nav" aria-label="Поточний розділ">
-          <span>ЗВІТ / 001</span>
-          <nav aria-label="Розділи">
+        <div className="chapter-nav" aria-label={ui.text029}>
+          <span>{ui.text030}</span>
+          <nav aria-label={ui.text031}>
             {r.chapters.map(([id, title], i) => (
               <a
                 key={id}
@@ -314,83 +327,70 @@ function App() {
             ))}
           </nav>
           <button onClick={() => setMotion(!motion)} aria-pressed={!motion}>
-            {motion ? "Рух: увімк." : "Рух: вимк."}
+            {motion ? ui.text032 : ui.text033}
           </button>
         </div>
-        <Chapter
-          id="summary"
-          no="01"
-          title="Висновок перед доказами."
-          subtitle="Для тих, хто цінує свій час більше, ніж автори цього звіту."
-        >
+        <Chapter id="summary" no="01" title={ui.text034} subtitle={ui.text035}>
           <Exhibit n={1}>
             <div className="executive">
               {r.friendName}
               <br />
-              <em>помиляється.</em>
+              <em>{ui.text036}</em>
               <span className="conclusion-mark" aria-hidden="true">
                 ↙
               </span>
             </div>
-            <p>Далі — 40 експонатів та надмірна кількість пояснень.</p>
+            <p>{ui.text037}</p>
             <div className="stats-strip">
               <div>
                 <strong className="red">
                   {number(r.statistics.correct)}
                   <small>%</small>
                 </strong>
-                <p>Імовірність мати рацію</p>
+                <p>{ui.text038}</p>
               </div>
               <div>
                 <strong>
                   {number(r.statistics.confident)}
                   <small>%</small>
                 </strong>
-                <p>Імовірність вважати себе правим</p>
+                <p>{ui.text039}</p>
               </div>
               <div>
                 <strong>−0,81</strong>
-                <p>Зв’язок упевненості й точності</p>
+                <p>{ui.text040}</p>
               </div>
               <div>
                 <strong>≈ 0</strong>
-                <p>Суспільне значення</p>
+                <p>{ui.text041}</p>
               </div>
             </div>
           </Exhibit>
           <Exhibit n={2} className="impact">
             <div className="impact-bars">
               <div>
-                <span>Важливість суперечки</span>
+                <span>{ui.text042}</span>
                 <i style={{ width: "1%" }} />
               </div>
               <div>
-                <span>Витрачені зусилля</span>
+                <span>{ui.text043}</span>
                 <i style={{ width: "100%" }} />
               </div>
             </div>
-            <p className="fine">
-              Рекомендовано: прийняти поразку з гідністю. Або просто
-              посміхнутися.
-            </p>
+            <p className="fine">{ui.text044}</p>
           </Exhibit>
         </Chapter>
-        <Chapter
-          id="scope"
-          no="02"
-          title="Як ми сюди дійшли."
-          subtitle="Спочатку була думка. Потім усе вийшло з-під контролю."
-        >
+        <Chapter id="scope" no="02" title={ui.text045} subtitle={ui.text046}>
           <Exhibit n={3}>
             <div className="disagreement">{r.disagreement}</div>
             <div className="positions">
               <p>
-                <span className="mono">ПОЗИЦІЯ А</span>
+                <span className="mono">{ui.text047}</span>
                 {r.myPosition}
               </p>
               <span className="versus">vs.</span>
               <p>
-                <span className="mono">ПОЗИЦІЯ Б</span>
+                <span className="mono">{ui.text048}</span>
                 {r.friendPosition}
               </p>
             </div>
@@ -409,16 +409,18 @@ function App() {
             <div>
               <Exhibit n={5}>
                 <blockquote>
-                  Гучність не є<br />
-                  одиницею вимірювання
+                  {ui.text049}
                   <br />
-                  <em>істини.</em>
+                  {ui.text050}
+                  <br />
+                  <em>{ui.text051}</em>
                 </blockquote>
               </Exhibit>
               <Exhibit n={6}>
                 <details>
                   <summary>
-                    Відкрити методологічний протокол <span>+</span>
+                    {ui.text052}
+                    <span>+</span>
                   </summary>
                   <dl className="methods">
                     {r.methods.map(([title, text]) => (
@@ -430,32 +432,24 @@ function App() {
                   </dl>
                 </details>
                 <p className="sample-size">
-                  n = 1<small>суперечка²</small>
+                  n = 1<small>{ui.text053}</small>
                 </p>
               </Exhibit>
             </div>
           </div>
           <Exhibit n={7}>
             <div className="dataset">
-              <span>120 спостережень</span>
+              <span>{ui.text054}</span>
               <span>SEED {r.seed}</span>
-              <span>0 реальних фактів</span>
-              <span>100% відтворюваності</span>
+              <span>{ui.text055}</span>
+              <span>{ui.text056}</span>
             </div>
           </Exhibit>
         </Chapter>
-        <Chapter
-          id="evidence"
-          no="03"
-          title="Дані мають що сказати."
-          subtitle="Особливо коли ми самі їх вигадали."
-        >
+        <Chapter id="evidence" no="03" title={ui.text057} subtitle={ui.text058}>
           <Exhibit n={8} className="featured-chart">
             <Plot />
-            <p className="figure-caption">
-              РИС. 08 / Кожна точка — синтетичне спостереження. Лінія —
-              авторська ілюстрація тренду.
-            </p>
+            <p className="figure-caption">{ui.text059}</p>
           </Exhibit>
           <div className="two-column">
             <Exhibit n={9}>
@@ -470,30 +464,28 @@ function App() {
               <div className="efficiency">
                 <div>
                   <b>100</b>
-                  <span>слів</span>
+                  <span>{ui.text060}</span>
                 </div>
                 <div>
                   <b>3</b>
-                  <span>корисні докази</span>
+                  <span>{ui.text061}</span>
                 </div>
               </div>
-              <p className="mono">ККД АРГУМЕНТУ: 3,00%</p>
+              <p className="mono">{ui.text062}</p>
               <Plot kind="stability" />
             </Exhibit>
             <Exhibit n={12}>
               <Surface />
               <Formula tex="W=\frac{C\cdot S^{2}}{E+1}" />
-              <p className="fine">
-                C — впевненість · S — впертість · E — докази
-              </p>
+              <p className="fine">{ui.text063}</p>
             </Exhibit>
           </div>
         </Chapter>
         <Chapter
           id="statistics"
           no="04"
-          title="Точність до абсурду."
-          subtitle="Коли одного знака після коми недостатньо для перемоги."
+          title={ui.text064}
+          subtitle={ui.text065}
         >
           <div className="two-column">
             <Exhibit n={13}>
@@ -503,22 +495,23 @@ function App() {
                   R² <b>0,87</b>
                 </span>
                 <span>
-                  Відношення шансів <b>14,72</b>
+                  {ui.text066}
+                  <b>14,72</b>
                 </span>
               </div>
             </Exhibit>
             <Exhibit n={14}>
               <Formula tex="P(H\mid E)\propto P(E\mid H)P(H)" />
               <Plot kind="distribution" />
-              <p className="fine">Апріорна: 50% → умовна апостеріорна: 7,4%.</p>
+              <p className="fine">{ui.text067}</p>
             </Exhibit>
           </div>
           <Exhibit n={15} className="p-value">
-            <span className="mono">СТАТИСТИЧНО НЕПРИСТОЙНО</span>
+            <span className="mono">{ui.text068}</span>
             <div>
               p = <em>{r.statistics.p}</em>
             </div>
-            <p>Гіпотезу відхилено з непотрібним ентузіазмом.</p>
+            <p>{ui.text069}</p>
           </Exhibit>
           <Exhibit n={16}>
             <Interval />
@@ -527,30 +520,20 @@ function App() {
         <Chapter
           id="simulation"
           no="05"
-          title="А якщо спробувати 10 000 разів?"
-          subtitle="Масштаб обчислень змінився. Масштаб проблеми — ні."
+          title={ui.text070}
+          subtitle={ui.text071}
           dark
         >
           <Exhibit n={17}>
             <MonteCarlo motion={motion} />
-            <p className="figure-caption">
-              РИС. 17 — Ми вже далеко за межами необхідного.
-            </p>
+            <p className="figure-caption">{ui.text072}</p>
           </Exhibit>
           <Exhibit n={18}>
             <div className="scenario-list">
               {[
-                ["Базовий світ", "Докази мають значення.", "Без змін"],
-                [
-                  "Світ без заперечень",
-                  "Ніхто не сперечається. Це не означає згоди.",
-                  "Без змін",
-                ],
-                [
-                  "Світ суцільної впевненості",
-                  "Доказів немає. Усі переконані.",
-                  "Модель зламана",
-                ],
+                [ui.text073, ui.text074, ui.text075],
+                [ui.text076, ui.text077, ui.text078],
+                [ui.text079, ui.text080, ui.text081],
               ].map(([name, body, result]) => (
                 <div key={name}>
                   <h4>{name}</h4>
@@ -561,12 +544,7 @@ function App() {
             </div>
           </Exhibit>
         </Chapter>
-        <Chapter
-          id="strategy"
-          no="06"
-          title="Потрібен стратегічний підхід."
-          subtitle="До проблеми, яку можна було розв’язати словами «ну добре»."
-        >
+        <Chapter id="strategy" no="06" title={ui.text082} subtitle={ui.text083}>
           <Exhibit n={19}>
             <div className="swot">
               {r.swot.map(([letter, title, ...items]) => (
@@ -588,11 +566,11 @@ function App() {
           <Exhibit n={21}>
             <div className="table-scroll">
               <table>
-                <caption>Вигадана оцінка позицій за шкалою від 0 до 10</caption>
+                <caption>{ui.text084}</caption>
                 <thead>
                   <tr>
-                    <th>Критерій</th>
-                    <th>Вага</th>
+                    <th>{ui.text085}</th>
+                    <th>{ui.text086}</th>
                     <th>{r.myPosition}</th>
                     <th>{r.friendPosition}</th>
                   </tr>
@@ -609,7 +587,7 @@ function App() {
                 </tbody>
                 <tfoot>
                   <tr>
-                    <th>Зважений результат</th>
+                    <th>{ui.text087}</th>
                     <td>100%</td>
                     <td>{number(scores[0], 2)}</td>
                     <td>{number(scores[1], 2)}</td>
@@ -621,12 +599,8 @@ function App() {
           <div className="two-column">
             <Exhibit n={22}>
               <div className="stakeholders">
-                <span className="mono">ВПЛИВ ↑</span>
-                <svg
-                  viewBox="0 0 480 310"
-                  role="img"
-                  aria-label="Найбільший вплив та інтерес у двох сторін суперечки; історики — нуль"
-                >
+                <span className="mono">{ui.text088}</span>
+                <svg viewBox="0 0 480 310" role="img" aria-label={ui.text089}>
                   <path
                     d="M45 20V260H450M45 140H450M245 20V260"
                     className="gridline"
@@ -649,7 +623,7 @@ function App() {
                     </g>
                   ))}
                   <text x="440" y="300" textAnchor="end">
-                    ІНТЕРЕС →
+                    {ui.text090}
                   </text>
                 </svg>
               </div>
@@ -657,39 +631,39 @@ function App() {
             <Exhibit n={23}>
               <div className="cost-benefit">
                 <div>
-                  <h4>− Витрати</h4>
+                  <h4>{ui.text091}</h4>
                   {r.costs.map((x) => (
                     <p key={x}>{x}</p>
                   ))}
                 </div>
                 <div>
-                  <h4>+ Вигоди</h4>
+                  <h4>{ui.text092}</h4>
                   {r.benefits.map((x) => (
                     <p key={x}>{x}</p>
                   ))}
                 </div>
               </div>
               <p className="npv">
-                NPV <em>позитивна.</em>
+                NPV <em>{ui.text093}</em>
               </p>
             </Exhibit>
           </div>
           <Exhibit n={24}>
             <div className="horizons">
               <span>
-                ЗАРАЗ
+                {ui.text094}
                 <br />
-                <b>Пауза.</b>
+                <b>{ui.text095}</b>
               </span>
               <span>
-                ПОТІМ
+                {ui.text096}
                 <br />
-                <b>Нова тема.</b>
+                <b>{ui.text097}</b>
               </span>
               <span>
-                ЗРЕШТОЮ
+                {ui.text098}
                 <br />
-                <b>Нічого.</b>
+                <b>{ui.text099}</b>
               </span>
             </div>
           </Exhibit>
@@ -697,8 +671,8 @@ function App() {
         <Chapter
           id="mechanism"
           no="07"
-          title="Усередині переконаності."
-          subtitle="Складна архітектура простого небажання погодитися."
+          title={ui.text100}
+          subtitle={ui.text101}
           dark
         >
           <Exhibit n={25}>
@@ -718,17 +692,17 @@ function App() {
           <div className="two-column">
             <Exhibit n={27}>
               <div className="causal">
-                <span>Висока впевненість</span>
+                <span>{ui.text102}</span>
                 <b>↓</b>
-                <span>Менше переосмислення</span>
+                <span>{ui.text103}</span>
                 <b>↓</b>
-                <span>Більше повторення</span>
+                <span>{ui.text104}</span>
                 <b>↓</b>
-                <span>Більше помилковості</span>
+                <span>{ui.text105}</span>
                 <aside>
-                  ↗ Конфаундер:
+                  {ui.text106}
                   <br />
-                  енергія уявного чату
+                  {ui.text107}
                 </aside>
               </div>
             </Exhibit>
@@ -737,12 +711,7 @@ function App() {
             </Exhibit>
           </div>
         </Chapter>
-        <Chapter
-          id="model"
-          no="08"
-          title="Спробуйте змінити висновок."
-          subtitle="Ми залишили вам усі важелі. Майже."
-        >
+        <Chapter id="model" no="08" title={ui.text108} subtitle={ui.text109}>
           <Exhibit n={29}>
             <LiveModel />
           </Exhibit>
@@ -752,24 +721,23 @@ function App() {
             <Exhibit n={32} />
           </div>
         </Chapter>
-        <Chapter
-          id="review"
-          no="09"
-          title="Наука потребує сумнівів."
-          subtitle="Ми запросили їх. Вони залишили зауваження."
-        >
+        <Chapter id="review" no="09" title={ui.text110} subtitle={ui.text111}>
           <Exhibit n={33}>
             <div className="limitations">
               <span>n = 1</span>
-              <span>валідність = 0</span>
-              <span>амбіції → ∞</span>
+              <span>{ui.text112}</span>
+              <span>{ui.text113}</span>
             </div>
           </Exhibit>
           <Exhibit n={34}>
             <div className="reviewers">
               {r.reviewers.map(([name, quote]) => (
                 <blockquote key={name}>
-                  <span className="mono">{name} / ВИГАДАНИЙ</span>«{quote}»
+                  <span className="mono">
+                    {name}
+                    {ui.text114}
+                  </span>
+                  «{quote}»
                 </blockquote>
               ))}
             </div>
@@ -800,7 +768,10 @@ function App() {
           </Exhibit>
           <div className="two-column">
             <Exhibit n={37}>
-              <p className="mono">ГЕНЕРАТОР: LCG / SEED {r.seed}</p>
+              <p className="mono">
+                {ui.text115}
+                {r.seed}
+              </p>
               {r.footnotes.map((text) => (
                 <p className="fine" key={text}>
                   {text}
@@ -816,47 +787,36 @@ function App() {
             </Exhibit>
           </div>
         </Chapter>
-        <Chapter
-          id="verdict"
-          no="10"
-          title="Питання закрито."
-          subtitle="Не тому, що ми маємо рацію. Тому, що сторінка закінчується."
-        >
+        <Chapter id="verdict" no="10" title={ui.text116} subtitle={ui.text117}>
           <Exhibit n={39} />
           <Exhibit n={40} className="last-exhibit">
             <div className="verdict">
               <p>{r.friendName}</p>
               <h2>{r.finalMessage}</h2>
-              <span>з повагою.</span>
+              <span>{ui.text118}</span>
             </div>
           </Exhibit>
           <div className="postcredits">
             <dl>
               <div>
-                <dt>Бюджет дослідження</dt>
-                <dd>прикрий.</dd>
+                <dt>{ui.text119}</dt>
+                <dd>{ui.text120}</dd>
               </div>
               <div>
-                <dt>Суспільний вплив</dt>
-                <dd>мізерний.</dd>
+                <dt>{ui.text121}</dt>
+                <dd>{ui.text122}</dd>
               </div>
               <div>
-                <dt>Особисте задоволення</dt>
-                <dd>статистично значуще.</dd>
+                <dt>{ui.text123}</dt>
+                <dd>{ui.text124}</dd>
               </div>
             </dl>
             <div className="post-actions">
-              <button
-                onClick={() => setNotice("Ні. Ви вже прочитали достатньо.")}
-              >
-                Завантажити повний звіт ↗
+              <button onClick={() => setNotice(ui.text125)}>
+                {ui.text126}
               </button>
-              <button
-                onClick={() =>
-                  setNotice("Апеляцію відхилено. Дружбу збережено.")
-                }
-              >
-                Оскаржити висновки ↗
+              <button onClick={() => setNotice(ui.text127)}>
+                {ui.text128}
               </button>
             </div>
             <p role="status" className="notice">
@@ -866,9 +826,9 @@ function App() {
         </Chapter>
       </main>
       <footer className="footer">
-        <a href="#top">↑ До початку цієї помилки</a>
+        <a href="#top">{ui.text129}</a>
         <p>{r.disclaimer}</p>
-        <span className="mono">БНД / КІНЕЦЬ ЗВІТУ</span>
+        <span className="mono">{ui.text130}</span>
       </footer>
     </>
   );

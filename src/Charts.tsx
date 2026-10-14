@@ -1,3 +1,4 @@
+import { ui } from "./content/report";
 import { useEffect, useRef, useState } from "react";
 import { report, number } from "./content/report";
 import { dataset, simulate, evaluate } from "./lib/fakeData";
@@ -6,14 +7,14 @@ const points = dataset(report.seed);
 export function Plot({ kind = "scatter" }: { kind?: string }) {
   const title =
     kind === "scatter"
-      ? "Впевненість зростає, точність падає"
+      ? ui.text131
       : kind === "distribution"
-        ? "Умовний розподіл доказів"
+        ? ui.text132
         : kind === "stability"
-          ? "Коливання навколо хибної позиції"
+          ? ui.text133
           : kind === "cumulative"
-            ? "Накопичення доказів"
-            : "Помилковість зростає з кожним раундом";
+            ? ui.text134
+            : ui.text135;
   const series = Array.from({ length: 60 }, (_, i) => {
     const x = i / 59;
     return [
@@ -30,7 +31,10 @@ export function Plot({ kind = "scatter" }: { kind?: string }) {
   });
   return (
     <svg className="plot" viewBox="0 0 710 340" role="img" aria-label={title}>
-      <title>{title} — вигадані дані</title>
+      <title>
+        {title}
+        {ui.text136}
+      </title>
       {[0, 25, 50, 75, 100].map((t) => (
         <g key={t}>
           <line
@@ -49,10 +53,10 @@ export function Plot({ kind = "scatter" }: { kind?: string }) {
         </g>
       ))}
       <text x="54" y="22">
-        {kind === "scatter" ? "ТОЧНІСТЬ, %" : "УМОВНИЙ ІНДЕКС"}
+        {kind === "scatter" ? ui.text137 : ui.text138}
       </text>
       <text x="654" y="337" textAnchor="end">
-        {kind === "scatter" ? "ВПЕВНЕНІСТЬ, %" : "НОРМАЛІЗОВАНА ШКАЛА →"}
+        {kind === "scatter" ? ui.text139 : ui.text140}
       </text>
       {kind === "scatter" ? (
         <>
@@ -66,8 +70,10 @@ export function Plot({ kind = "scatter" }: { kind?: string }) {
                 className={i === 90 ? "special" : ""}
               >
                 <title>
-                  {i === 90 ? "Потрібне джерело. " : ""}Впевненість{" "}
-                  {number(p.x)}%, точність {number(p.y)}%
+                  {i === 90 ? ui.text141 : ""}
+                  {ui.text142} {number(p.x)}
+                  {ui.text143}
+                  {number(p.y)}%
                 </title>
               </circle>
             ))}
@@ -77,7 +83,7 @@ export function Plot({ kind = "scatter" }: { kind?: string }) {
             r = −0,81
           </text>
           <text x="420" y="102">
-            переконаність ≠ доказ
+            {ui.text144}
           </text>
         </>
       ) : (
@@ -95,11 +101,9 @@ export function Surface() {
       className="surface"
       viewBox="0 0 580 430"
       role="img"
-      aria-label="Умовна поверхня: впевненість і впертість збільшують індекс помилковості"
+      aria-label={ui.text145}
     >
-      <title>
-        W = C × S² / (E + 1). Декоративна проєкція вигаданої моделі.
-      </title>
+      <title>{ui.text146}</title>
       {Array.from({ length: 19 }, (_, j) => (
         <path
           key={j}
@@ -135,14 +139,14 @@ export function Surface() {
         W
       </text>
       <text x="385" y="304">
-        ВПЕВНЕНІСТЬ
+        {ui.text147}
       </text>
       <text x="140" y="390">
-        ВПЕРТІСТЬ →
+        {ui.text148}
       </text>
       <circle cx="518" cy="57" r="4" fill="currentColor" />
       <text x="350" y="30">
-        ЗОНА ПЕРЕКОНАНОСТІ
+        {ui.text149}
       </text>
       <path d="M465 36L515 52" stroke="currentColor" />
     </svg>
@@ -153,13 +157,9 @@ export function Interval() {
     <div className="interval">
       <div className="interval-value">
         {number(report.statistics.wrongness)}
-        <span>індекс помилковості</span>
+        <span>{ui.text150}</span>
       </div>
-      <svg
-        viewBox="0 0 700 130"
-        role="img"
-        aria-label="Умовний 95-відсотковий інтервал: від 84,1 до 91,8"
-      >
+      <svg viewBox="0 0 700 130" role="img" aria-label={ui.text151}>
         <path d="M30 60H670" className="gridline" />
         {[80, 85, 90, 95, 100].map((n, i) => (
           <g key={n}>
@@ -184,7 +184,7 @@ export function Interval() {
           91,8
         </text>
       </svg>
-      <p className="mono">95% ДІ: [помиляється; сильно помиляється]¹</p>
+      <p className="mono">{ui.text152}</p>
     </div>
   );
 }
@@ -234,11 +234,7 @@ export function MonteCarlo({ motion }: { motion: boolean }) {
             setRun((v) => v + 1);
           }}
         >
-          {running
-            ? "Обчислюємо…"
-            : run
-              ? "Повторити симуляцію ↻"
-              : "Запустити 10 000 сценаріїв ↗"}
+          {running ? ui.text153 : run ? ui.text154 : ui.text155}
         </button>
       </div>
       <div className="canvas-wrap">
@@ -252,7 +248,7 @@ export function MonteCarlo({ motion }: { motion: boolean }) {
         {!run && (
           <div className="canvas-idle">
             <span>10⁴</span>
-            <p>способів дійти того самого висновку.</p>
+            <p>{ui.text156}</p>
           </div>
         )}
       </div>
@@ -272,14 +268,14 @@ export function MonteCarlo({ motion }: { motion: boolean }) {
           </strong>
         </div>
         <div>
-          <span>Сценаріїв опрацьовано</span>
+          <span>{ui.text157}</span>
           <strong>{count.toLocaleString("uk-UA")}</strong>
         </div>
       </div>
       <p className="fine">
-        У {number(report.statistics.gaveUp)}% сценаріїв дослідники також
-        здалися. Це окрема вигадана ознака, яка перетинається з результатами, а
-        не третя категорія.
+        {ui.text158}
+        {number(report.statistics.gaveUp)}
+        {ui.text159}
       </p>
     </div>
   );
@@ -289,7 +285,7 @@ export function Risk() {
   return (
     <div className="risk-layout">
       <div>
-        <p className="mono">ВПЛИВ ↑</p>
+        <p className="mono">{ui.text160}</p>
         <div className="risk-grid">
           {Array.from({ length: 25 }, (_, i) => {
             const x = (i % 5) + 1,
@@ -317,15 +313,16 @@ export function Risk() {
             );
           })}
         </div>
-        <p className="mono align-right">ЙМОВІРНІСТЬ →</p>
+        <p className="mono align-right">{ui.text161}</p>
       </div>
       <div className="risk-detail" aria-live="polite">
         <span className="big-index">0{selected + 1}</span>
         <h4>{report.risks[selected].name}</h4>
         <p>{report.risks[selected].detail}</p>
         <span className="mono">
-          ЙМОВІРНІСТЬ {report.risks[selected].x}/5 · ВПЛИВ{" "}
-          {report.risks[selected].y}/5
+          {ui.text162}
+          {report.risks[selected].x}
+          {ui.text163} {report.risks[selected].y}/5
         </span>
       </div>
     </div>
@@ -337,9 +334,9 @@ export function Network() {
       className="network"
       viewBox="0 0 900 400"
       role="img"
-      aria-label="Декоративна нейромережа: докази проходять крізь раціоналізацію та підсилення впевненості до виходу «Неправильно»"
+      aria-label={ui.text164}
     >
-      <title>Ілюстрація, а не навчена нейромережа</title>
+      <title>{ui.text165}</title>
       {[0, 1, 2].flatMap((layer) =>
         Array.from({ length: layer === 0 ? 6 : 4 }, (_, i) =>
           Array.from({ length: 4 }, (_, j) => (
@@ -371,16 +368,16 @@ export function Network() {
         )),
       )}
       <text x="375" y="370" textAnchor="middle">
-        Раціоналізація
+        {ui.text166}
       </text>
       <text x="580" y="370" textAnchor="middle">
-        Вибіркова пам’ять
+        {ui.text167}
       </text>
       <text x="785" y="370" textAnchor="middle">
-        Підсилення
+        {ui.text168}
       </text>
       <text x="785" y="35" textAnchor="middle" className="annotation">
-        НЕПРАВИЛЬНО
+        {ui.text169}
       </text>
     </svg>
   );
@@ -406,7 +403,10 @@ export function Argument() {
       <p className="graph-explanation" aria-live="polite">
         {report.graph[active][1]}
       </p>
-      <div className="graph-end">{report.friendName} помиляється ↓</div>
+      <div className="graph-end">
+        {report.friendName}
+        {ui.text170}
+      </div>
     </div>
   );
 }
@@ -438,11 +438,11 @@ export function LiveModel() {
           </label>
         ))}
         <button className="text-button" onClick={() => setValues(defaults)}>
-          Відновити параметри ↺
+          {ui.text171}
         </button>
       </div>
       <div className="model-output">
-        <span className="mono">ЙМОВІРНІСТЬ ПОМИЛКИ</span>
+        <span className="mono">{ui.text172}</span>
         <output aria-live="polite" aria-atomic="true">
           <strong>
             {number(result.probability)}
@@ -450,7 +450,7 @@ export function LiveModel() {
           </strong>
           <span>
             {result.compromised
-              ? "Цілісність моделі порушено."
+              ? ui.text173
               : `${report.friendName} ПОМИЛЯЄТЬСЯ`}
           </span>
         </output>
@@ -471,10 +471,7 @@ export function LiveModel() {
             />
           ))}
         </svg>
-        <p>
-          Умовна оцінка, а не статистичний прогноз. Модель створена для жарту й
-          відкрито упереджена.
-        </p>
+        <p>{ui.text174}</p>
       </div>
     </div>
   );

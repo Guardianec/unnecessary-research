@@ -62,12 +62,7 @@ test("entire report, interactions, accessibility and screenshots", async ({
     .getByRole("button", { name: "Викриття вигаданих даних", exact: true })
     .click();
   await expect(page.locator(".risk-detail")).toContainText("Це не викриття");
-  await page
-    .locator("input#control-evidence")
-    .fill("0")
-    .catch(async () => {
-      await page.getByLabel("Якість доказів", { exact: false }).fill("0");
-    });
+  await page.locator("input#control-evidence").fill("0");
   await page.locator("input#control-sense").fill("0");
   await page.locator("input#control-confidence").fill("100");
   await expect(page.locator(".model-output")).toContainText(
@@ -82,11 +77,11 @@ test("entire report, interactions, accessibility and screenshots", async ({
     "Прийнято до розгляду",
   );
   await page.getByRole("button", { name: "Завантажити повний звіт ↗" }).click();
-  await expect(page.getByRole("status")).toContainText(
+  await expect(page.locator(".notice")).toContainText(
     "Ви вже прочитали достатньо",
   );
   await page.getByRole("button", { name: "Оскаржити висновки ↗" }).click();
-  await expect(page.getByRole("status")).toContainText("Апеляцію відхилено");
+  await expect(page.locator(".notice")).toContainText("Апеляцію відхилено");
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(page.locator("html")).toHaveAttribute("data-motion", "off");
   await page.locator("#top").scrollIntoViewIfNeeded();
